@@ -1,0 +1,22 @@
+{
+  "name": "web-team-hackathon",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "npm start --prefix frontend ",
+    "backend": "npm start --prefix backend",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nirmitmistry/ComplaintSystem.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nirmitmistry/ComplaintSystem/issues"
+  },
+  "homepage": "https://github.com/Nirmitmistry/ComplaintSystem#readme",
+  "description": ""
+}
