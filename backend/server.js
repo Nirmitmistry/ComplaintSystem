@@ -11,7 +11,7 @@ import startCronJobs from './jobs/Scheduler.js';
 
 dotenv.config();
 
-~
+
 await connectDB();
 
 const app = express();
