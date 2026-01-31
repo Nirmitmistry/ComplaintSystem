@@ -8,7 +8,7 @@ import Auth from "./components/Auth.jsx";
 
 import StudentDashboard from "./pages/StudentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
-import SuperAdminDashboard from "./pages/SuperAdminDashboard";
+import SuperAdminDashboard from "./pages/SuperadminDashboard";
 
 function App() {
   const { user, token } = useAppContext();
