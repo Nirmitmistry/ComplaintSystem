@@ -1,21 +1,49 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home'; 
-import Login from './pages/Login'; 
+import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useAppContext } from "./context/AuthContext.jsx";
 
-const App = () => {
+
+import Navbar from "./components/Navbar.jsx";
+import Auth from "./components/Auth.jsx";
+
+import StudentDashboard from "./pages/StudentDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import SuperAdminDashboard from "./pages/SuperAdminDashboard";
+
+function App() {
+  const { user, token } = useAppContext();
+
+  
+  if (!token) {
+    return (
+      <>
+        <Toaster position="top-right" />
+        <Auth />
+      </>
+    );
+  }
+
   return (
-    <Router>
-      <div className="min-h-screen bg-base-200"> 
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </div>
-    </Router>
-  )
+    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
+      <Toaster position="top-right" />
+      
+      <Navbar />    
+      <main className="pt-6">
+        {/* Simple Role-Based Routing */}
+        {!user ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div>
+        ) : user.role === "Admin" ? (
+          <AdminDashboard />
+        ) : user.role === "SuperAdmin" ? (
+          <SuperAdminDashboard />
+        ) : user.role === "Student" ? (
+          <StudentDashboard />
+        ) : null}
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;

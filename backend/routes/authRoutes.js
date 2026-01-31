@@ -1,7 +1,7 @@
 import express from 'express';
 import { registerUser, loginUser, getUserData } from '../controllers/authController.js';
-import { auth } from '@clerk/nextjs/server';
-import { protect } from '../middleware/authMiddleware.js';
+
+import { protect } from '../middleware/auth.js';
 const authRouter = express.Router();
 
 authRouter.post('/register', registerUser);
