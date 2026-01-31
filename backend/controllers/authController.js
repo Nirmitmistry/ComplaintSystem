@@ -72,3 +72,20 @@ export const loginUser = async (req, res) => {
        res.status(500).json({ success: false, message: error.message });
     }
 };
+
+export const getUserData = async (req, res) => {
+  try {
+    const user = {
+        _id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
+        studentdetails: req.user.studentdetails,
+        admindepartment: req.user.admindepartment
+    };
+    
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
