@@ -1,35 +1,49 @@
 import cron from "node-cron";
-import Complaint from "./models/Complaint.js"; 
+import Complaint from "./models/Complaint.js";
+
 
 const startCronJobs = () => {
+
   cron.schedule('*/1 * * * *', async () => {
-    console.log(' Checking for ignored complaints...');
+    console.log('--- Running Time-Based Intelligence Checks ---');
 
     try {
-      const timeThreshold = new Date(Date.now() - 2 * 60 * 1000); 
-      const ignoredComplaints = await Complaint.find({
-        status: "Pending",
-        createdAt: { $lt: timeThreshold },
-        priority: { $ne: "High" } 
-      });
+      const now = new Date();
+      const thirtyMinThreshold = new Date(now - 30 * 60 * 1000); 
+      const twentyFourHourThreshold = new Date(now - 24 * 60 * 60 * 1000);
+      const priorityUpdate = await Complaint.updateMany(
+        {
+          status: "Pending", 
+          createdAt: { $lt: thirtyMinThreshold },
+          priority: { $ne: "High" }
+        },
+        { 
+          $set: { priority: "High" },
+          $push: { history: { action: "Auto-escalated priority due to inactivity", timestamp: now } } 
+        }
+      );
 
-      if (ignoredComplaints.length > 0) {
-        const idsToUpdate = ignoredComplaints.map(c => c._id);
-        await Complaint.updateMany(
-          { _id: { $in: idsToUpdate } },
-          { 
-            $set: { priority: "High", isEscalated: true }
-          }
-        );
+      if (priorityUpdate.modifiedCount > 0) {
+        console.log(`Priority increased for ${priorityUpdate.modifiedCount} complaints.`);
+      }
+      const adminEscalation = await Complaint.updateMany(
+        {
+          status: { $in: ["Pending", "In Progress"] }, 
+          createdAt: { $lt: twentyFourHourThreshold },
+          isEscalated: { $ne: true } 
+        },
+        { 
+          $set: { isEscalated: true },
+          $push: { history: { action: "Escalated to Super Admin ", timestamp: now } }
+        }
+      );
 
-        console.log(` Escalated ${ignoredComplaints.length} complaints to High Priority!`);
-      } else {
-        console.log(" No complaints need escalation.");
+      if (adminEscalation.modifiedCount > 0) {
+        console.log(` Escalated ${adminEscalation.modifiedCount} complaints to Super Admin.`);
       }
 
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ success: false, message: error.message });
+      console.error("Cron Job Execution Error:", error.message);
     }
   });
 };
