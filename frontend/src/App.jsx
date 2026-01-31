@@ -6,9 +6,9 @@ import { useAppContext } from "./context/AuthContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Auth from "./components/Auth.jsx";
 
-import StudentDashboard from "./pages/StudentDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-import SuperAdminDashboard from "./pages/SuperadminDashboard";
+import StudentDashboard from "./pages/StudentDashboard.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import SuperAdminDashboard from "./pages/SuperadminDashboard.jsx";
 
 function App() {
   const { user, token } = useAppContext();
