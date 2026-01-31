@@ -71,7 +71,7 @@ const SuperAdminDashboard = () => {
         </div>
       </div>
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-gray-800">Master List</h3>
+        <h3 className="text-xl font-bold text-gray-800">Super Admin List</h3>
         <div className="grid gap-4">
           {complaints.map(item => (
             <ComplaintCard key={item._id} data={item} role="Admin" refresh={fetchData} />
