@@ -34,7 +34,7 @@ const startCronJobs = () => {
         },
         { 
           $set: { isEscalated: true },
-          $push: { history: { action: "Escalated to Super Admin ", timestamp: now } }
+          $push: { logs: { action: "Escalated to Super Admin ", timestamp: now } }
         }
       );
 

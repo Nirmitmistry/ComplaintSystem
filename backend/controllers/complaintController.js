@@ -1,11 +1,22 @@
-import { get } from "mongoose";
 import Complaint from "../models/Complaint.js";
 import User from "../models/User.js";
-
 
 export const fileComplaint = async (req, res) => {
   try {
     const { title, description, category } = req.body;
+
+    const existingActiveComplaint = await Complaint.findOne({
+        raisedBy: req.user._id,
+        status: 'In Progress'
+    });
+
+    if (existingActiveComplaint) {
+        return res.status(400).json({ 
+            success: false, 
+            message: "Cannot raise a new complaint while one is In Progress" 
+        });
+    }
+
     const complaint = await Complaint.create({
       title,
       description,
@@ -22,6 +33,9 @@ export const fileComplaint = async (req, res) => {
         }
       ]
     });
+
+    req.io.to(category).emit('complaint_received', complaint);
+
     res.status(201).json({ success: true, complaint });
   } catch (error) {
     console.log(error.message);
@@ -75,6 +89,9 @@ export const claimComplaint = async (req, res) => {
 
         await complaint.save();
 
+        req.io.to(complaint.raisedBy.toString()).emit('status_changed', complaint);
+        req.io.to(complaint.category).emit('complaint_updated', complaint);
+
         res.json({ success: true, message: "Complaint Claimed Successfully", complaint });
 
     } catch (error) {
@@ -94,7 +111,6 @@ export const updateComplaintStatus = async (req, res) => {
             return res.json({ success: false, message: "Complaint not found" });
         }
 
-
         if (complaint.claimedBy?.toString() !== _id.toString() && role !== 'SuperAdmin') {
             return res.json({ success: false, message: "Unauthorized to update this complaint" });
         }
@@ -109,6 +125,9 @@ export const updateComplaintStatus = async (req, res) => {
 
         await complaint.save();
 
+        req.io.to(complaint.raisedBy.toString()).emit('status_changed', complaint);
+        req.io.to(complaint.category).emit('complaint_updated', complaint);
+
         res.json({ success: true, message: `Complaint ${status}`, complaint });
 
     } catch (error) {
@@ -116,6 +135,7 @@ export const updateComplaintStatus = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
 export const getComplaintDashboard = async (req, res) => {
     try {
         const { _id, role, admindepartment } = req.user;
