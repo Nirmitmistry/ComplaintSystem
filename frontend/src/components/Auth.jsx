@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAppContext } from "../context/AuthContext";
+import { useAppContext } from "../context/AuthContext.jsx";
 import { toast } from "react-hot-toast";
 
 const Auth = () => {

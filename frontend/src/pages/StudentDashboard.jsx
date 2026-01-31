@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useSocketContext } from "../context/SocketContext";
-import ComplaintCard from "../components/ComplaintCard";
-import { useAppContext } from "../context/AuthContext";
+import { useSocketContext } from "../context/SocketContext.jsx";
+import ComplaintCard from "../components/ComplaintCard.jsx";
+import { useAppContext } from "../context/AuthContext.jsx";
 
 const StudentDashboard = () => {
   const { socket } = useSocketContext();

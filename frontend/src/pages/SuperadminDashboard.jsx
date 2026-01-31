@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { useSocketContext } from "../context/SocketContext";
-import ComplaintCard from "../components/ComplaintCard";
+import { useSocketContext } from "../context/SocketContext.jsx";
+import ComplaintCard from "../components/ComplaintCard.jsx";
 
 const SuperAdminDashboard = () => {
   const { socket } = useSocketContext();
