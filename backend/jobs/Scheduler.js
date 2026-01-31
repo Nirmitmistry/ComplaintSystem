@@ -5,7 +5,7 @@ import Complaint from "./models/Complaint.js";
 const startCronJobs = () => {
 
   cron.schedule('*/1 * * * *', async () => {
-    console.log('--- Running Time-Based Intelligence Checks ---');
+    console.log('Time-Based Intelligence Checks ');
 
     try {
       const now = new Date();
