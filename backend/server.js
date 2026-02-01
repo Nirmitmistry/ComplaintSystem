@@ -11,6 +11,10 @@ import startCronJobs from './jobs/Scheduler.js';
 
 dotenv.config();
 
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'https://complaint-system-one.vercel.app' 
+];
 
 await connectDB();
 
@@ -18,7 +22,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: allowedOrigins,
   credentials: true,               
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
